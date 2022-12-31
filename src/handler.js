@@ -71,18 +71,44 @@ const addBookHandler = (req, h) => {
     return response;
 }
 
-const getAllBooksHandler = () => ({
-    status: 'success',
-    data: {
-      books: books.map(book => {
-        return {
-            id: book.id,
-            name: book.name,
-            publisher: book.publisher
-        }
-      })
-    },
-});
+const getAllBooksHandler = (req, h) => {
+    let filteredBook = structuredClone(books);
+
+    if (req.query.name !== undefined) {
+        filteredBook = filteredBook.filter(book => book.name
+            .toLowerCase()
+            .includes(req.query.name
+                .toLowerCase()));
+    }
+
+    console.log(req.query.reading);
+
+    if (req.query.reading === '0') {
+        console.log('masuk');
+        filteredBook = filteredBook.filter(book => book.reading === false);
+    } else if (req.query.reading === '1') {
+        filteredBook = filteredBook.filter(book => book.reading === true);
+    }
+
+    if (req.query.finished === '0') {
+        filteredBook = filteredBook.filter(book => book.finished === false);
+    } else if (req.query.finished === '1') {
+        filteredBook = filteredBook.filter(book => book.finished === true);
+    }
+    
+    return {
+        status: 'success',
+        data: {
+            books: filteredBook.map(book => {
+                return {
+                    id: book.id,
+                    name: book.name,
+                    publisher: book.publisher
+                }
+            })
+        },
+    }
+};
 
 const getBookHandler = (req, h) => {
     const { bookId } = req.params;
