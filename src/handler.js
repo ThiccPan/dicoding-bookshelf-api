@@ -198,7 +198,7 @@ const deleteBookHandler = (req, h) => {
     return response;
   }
 
-  books.splice(deleteIdx);
+  books.splice(deleteIdx, 1);
 
   const response = h.response({
     status: 'success',
