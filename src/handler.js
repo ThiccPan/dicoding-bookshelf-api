@@ -73,7 +73,7 @@ const addBookHandler = (req, h) => {
 };
 
 const getAllBooksHandler = (req) => {
-  let filteredBook = structuredClone(books);
+  let filteredBook = [...books];
 
   if (req.query.name !== undefined) {
     filteredBook = filteredBook.filter((book) => book.name
